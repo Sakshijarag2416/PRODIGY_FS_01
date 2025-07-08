@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2 id="welcome"></h2>
+    <p>You are successfully logged in 🎉</p>
+    <button onclick="logout()">Logout</button>
+  </div>
+  <script>
+    // Get username from localStorage, default to "jaragsakshi" if not found
+    // This handles cases where the user directly accesses dashboard.html without logging in,
+    // or if the username wasn't set for some reason.
+    const username = localStorage.getItem("username") || "jaragsakshi";
+    document.getElementById("welcome").textContent = `Welcome, ${username}`;
+
+    function logout() {
+      localStorage.clear(); // Clears all stored items, including the username
+      window.location.href = "login.html"; // Redirect back to the login page
+    }
+  </script>
+</body>
+</html>

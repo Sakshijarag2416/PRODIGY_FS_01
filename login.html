@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f1b38; /* match form background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .container {
+      background-color: #0f1b38;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      background-color: #00e3ff;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #03a9f4;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Form -->
+  <div class="container" id="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="email" value="jaragsakshi24@gmail.com" readonly />
+      <input type="password" id="password" value="12345678910" readonly />
+    
+      
+  
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo"> Login</button>
+  <div id="demo" class="collapse">
+    <p>welcome  jaragsakshi24</p>
+    <p>You are successfully logged in 🎉</p>
+  
+
+
+    </form>
+    <p class="message" id="login-msg"></p>
+  </div>
+
+  
+  
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      const msg = document.getElementById("login-msg");
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", data.username || "jaragsakshi");
+
+        document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("login-username").textContent = data.username || "jaragsakshi";
+        document.getElementById("welcome-slide").classList.remove("hidden");
+      } else {
+        msg.textContent = data.message;
+        msg.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>

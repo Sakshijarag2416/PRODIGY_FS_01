@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Registration Form -->
+  <div class="container" id="register-container">
+    <h2>Create Account</h2>
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" value="jaragsakshi24@gmail.com" readonly />
+      <input type="password" id="password" value="12345678910" readonly />
+      <button type="submit">Register</button>
+    </form>
+    <p class="message" id="register-msg"></p>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+
+  
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("register-msg");
+
+      if (!username) {
+        msg.textContent = "Please enter a username.";
+        msg.style.color = "red";
+        return;
+      }
+
+      const res = await fetch("http://localhost:5000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password })
+      });
+
+      const data = await res.json();
+      msg.textContent = data.message;
+      msg.style.color = data.message.includes("registered") ? "lightgreen" : "red";
+
+      if (data.message.includes("registered")) {
+        // Hide form and show welcome message
+        document.getElementById("register-container").classList.add("hidden");
+        document.getElementById("confirmation-slide").classList.remove("hidden");
+        document.getElementById("confirmation-message").textContent = `Welcome, ${username}!`;
+      }
+    });
+  </script>
+</body>
+</html>
